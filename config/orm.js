@@ -42,14 +42,12 @@ function objToSql(ob) {
 // Object for all our SQL statement functions.
 var orm = {
   all: function(tableInput, cb) {
-    return new Promise((resolve, reject) => {
-      var queryString = "SELECT * FROM " + tableInput + ";";
-      connection.query(queryString, function(err, result) {
-        if (err) {
-          throw err;
-        }
-        cb(result);
-      });
+    var queryString = "SELECT * FROM " + tableInput + ";";
+    connection.query(queryString, function(err, result) {
+      if (err) {
+        throw err;
+      }
+      cb(result);
     });
   },
   create: function(table, cols, vals, cb) {
@@ -90,14 +88,20 @@ var orm = {
       cb(result);
     });
   },
-  /* delete a row */
   delete: function(table, condition, cb) {
-    const queryString = `DELETE FROM ${table} WHERE ${condition}`;
+    var queryString = "DELETE FROM " + table;
+    queryString += " WHERE ";
+    queryString += condition;
+
     connection.query(queryString, function(err, result) {
+      if (err) {
+        throw err;
+      }
+
       cb(result);
     });
   }
 };
 
-// Export the orm object for the model (burger.js).
+// Export the orm object for the model (cat.js).
 module.exports = orm;
